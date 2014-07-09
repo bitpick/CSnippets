@@ -1,5 +1,15 @@
 /**
- * 2014, by bitpick
+ * Copyright (C) 2014 bitpick
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
  **/
 
 
@@ -27,7 +37,7 @@
  *              [...]
  *          }
  **/
-#define DECLARE_RAII_VARIABLE(vname, vtype, viniti, vdtor) \
+#define DECLARE_RAII_VARIABLE(vname, vtype, vinit, vdtor) \
     void _dtor_  ## vname(vtype *v) {\
         vdtor(*v);\
     } \
