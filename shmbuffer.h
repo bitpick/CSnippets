@@ -12,12 +12,17 @@
  * GNU General Public License for more details.
  **/
 
+
+/* Link with -lrt */
+
+
 #ifndef SHMBUFFER_H_
 #define SHMBUFFER_H_
 
 #include <sys/type.h>
 #include <sys/mman.h>
 #include <semaphore.h>
+#include "ringbuffer.h"
 
 #ifndef SHM_SIZE
 #define SHM_SIZE 4194304    // 4MByte, default value
@@ -28,11 +33,7 @@
 struct shmringbuff {
     sem_t sem;
     int error;
-    size_t size;
-    size_t buffer_size;
-    size_t buff_begin;
-    size_t buff_end;
-    size_t buff_ipos;
+    ringbuffer *buffer;
 };
 
 

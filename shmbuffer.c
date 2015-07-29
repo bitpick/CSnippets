@@ -18,7 +18,27 @@
 #include "shmbuffer.h"
 
 
-/* Link with -lrt */
+int shm_ringbuff_get_content_size(struct shmringbuff *buff)
+{
+	int content = 0;
+
+	// no data in buffer
+	if(buff->buff_rpos == buff->buff_wpos)
+		return content;
+
+	// write pointer flipped
+	if(buff->buff_wpos < buff->buff_rpos)
+	{
+		content = buff->buff_end - buff->buff_rpos;
+		content += buff->buff_wpos - buff->buff_begin;
+	}
+	else
+	{
+		content = buff->buff_wpos - buff->buff_rpos;
+	}
+
+	return content;
+}
 
 
 int shm_ringbuff_get_data_address(struct shmringbuff *buff)
@@ -50,7 +70,8 @@ int shm_ringbuff_init(struct shmringbuff **buff, size_t size, char *mapfile, int
 	*buff->size = sizeof(struct shmringbuff) + SHM_SIZE;
 	*buff->buff_begin = *buff + sizeof(struct shmringbuff);
 	*buff->buff_end = *buff->buff_begin + SHM_SIZE;
-	*buff->buff_ipos = *buff->buff_begin;
+	*buff->buff_rpos = *buff->buff_begin;
+	*buff->buff_wpos = *buff->buff_begin;
 
 	sem_init(*buff->sem, 1, 1);
 
@@ -99,13 +120,11 @@ int shm_ringbuff_connect_rw(char *mapfile, struct shmringbuff **buff)
 
 int shm_ringbuff_read(struct shmringbuff *buff, char *readbuff, size_t readbuff_size)
 {
-	// TODO: implementation
-	return -1;
+	return ringbuffer_read(readbuff, buff->buffer, readbuff_size);
 }
 
 
 int shm_ringbuff_write(struct shmringbuff`*buff, char *writebuff, size_t writebuff_size)
 {
-	// TODO: implementation
-	return -1;
+	return ringbuffer_write(buff->buffer, writebuff, writebuff_size);	
 }
